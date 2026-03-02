@@ -6,6 +6,7 @@ create extension if not exists "uuid-ossp";
 create table if not exists public.profiles (
   id uuid references auth.users on delete cascade not null primary key,
   name text not null,
+  branch text,
   required_percentage integer default 75,
   sem_end_date date, -- Added semester end date
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
@@ -21,8 +22,8 @@ create policy "Users can insert own profile" on public.profiles for insert with 
 create or replace function public.handle_new_user()
 returns trigger as $$$
 begin
-  insert into public.profiles (id, name, required_percentage)
-  values (new.id, new.raw_user_meta_data->>'full_name', 75);
+  insert into public.profiles (id, name, branch, required_percentage)
+  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'branch', 75);
   return new;
 end;
 $$$ language plpgsql security definer;

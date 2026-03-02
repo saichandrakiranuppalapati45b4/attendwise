@@ -5,6 +5,7 @@ import { UserPlus, AlertCircle } from 'lucide-react';
 
 const SignUp = () => {
     const [name, setName] = useState('');
+    const [branch, setBranch] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -30,7 +31,7 @@ const SignUp = () => {
             return;
         }
 
-        const { error: signUpError } = await signUp(email, password, name);
+        const { error: signUpError } = await signUp(email, password, name, branch);
 
         if (signUpError) {
             setError(signUpError.message);
@@ -78,6 +79,21 @@ const SignUp = () => {
                             />
                         </div>
                         <div>
+                            <label htmlFor="branch" className="block text-sm font-medium text-gray-700">
+                                Branch
+                            </label>
+                            <input
+                                id="branch"
+                                name="branch"
+                                type="text"
+                                required
+                                value={branch}
+                                onChange={(e) => setBranch(e.target.value)}
+                                className="mt-1 appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+                                placeholder="e.g., CSE"
+                            />
+                        </div>
+                        <div>
                             <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
                                 Email address
                             </label>
@@ -119,8 +135,8 @@ const SignUp = () => {
                         >
                             {isLoading ? 'Creating account...' : (
                                 <>
-                                    <UserPlus className="absolute left-4 w-5 h-5" />
-                                    Sign Up
+                                    <UserPlus className="absolute left-4 w-5 h-5 flex-shrink-0" />
+                                    Confirm Mail and Continue
                                 </>
                             )}
                         </button>
