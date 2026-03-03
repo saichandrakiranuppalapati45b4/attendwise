@@ -36,11 +36,9 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
-                <div>
-                    <h2 className="mt-2 text-center text-4xl font-extrabold text-gray-900 tracking-tight">
-                        AttendWise
-                    </h2>
-                    <p className="mt-4 text-center text-sm text-gray-600">
+                <div className="flex flex-col items-center">
+                    <img src="/student_logo.png" alt="AttendWise Logo" className="h-40 w-auto object-contain" />
+                    <p className="mt-4 text-center text-sm text-gray-600 font-medium">
                         Sign in to your account
                     </p>
                 </div>

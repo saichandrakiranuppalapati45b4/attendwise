@@ -79,11 +79,20 @@ const Layout = ({ children }) => {
         fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-                <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-                    <Link to={isAdminRoute ? "/admin" : "/"} className={`text-2xl font-bold ${isAdminRoute ? 'text-purple-600' : 'text-blue-600'}`}>
-                        {isAdminRoute ? 'AttendAdmin' : 'AttendWise'}
+                <div className="flex flex-col items-center justify-center py-8 px-6 border-b border-gray-200">
+                    <Link to={isAdminRoute ? "/admin" : "/"} className="flex flex-col items-center group">
+                        <img
+                            src={isAdminRoute ? "/admin_logo.png" : "/student_logo.png"}
+                            alt="Logo"
+                            className="h-32 w-auto object-contain transition-transform group-hover:scale-105"
+                        />
+                        {isAdminRoute && (
+                            <span className="mt-2 text-sm font-black uppercase tracking-widest text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-100">
+                                Admin Portal
+                            </span>
+                        )}
                     </Link>
-                    <button className="lg:hidden text-gray-500 hover:text-gray-700" onClick={toggleSidebar}>
+                    <button className="lg:hidden absolute right-4 top-4 text-gray-500 hover:text-gray-700" onClick={toggleSidebar}>
                         <X className="w-6 h-6" />
                     </button>
                 </div>
@@ -126,7 +135,9 @@ const Layout = ({ children }) => {
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
                 {/* Mobile Header */}
                 <header className="lg:hidden bg-white border-b border-gray-200 h-16 flex items-center px-4 justify-between">
-                    <Link to="/" className="text-xl font-bold text-blue-600">AttendWise</Link>
+                    <Link to="/" className="flex items-center">
+                        <img src="/student_logo.png" alt="Logo" className="h-12 w-auto object-contain" />
+                    </Link>
                     <button onClick={toggleSidebar} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md">
                         <Menu className="w-6 h-6" />
                     </button>
@@ -138,7 +149,7 @@ const Layout = ({ children }) => {
                     </div>
                     {/* Footer */}
                     <footer className="w-full py-6 text-center text-sm text-gray-500 border-t border-gray-200">
-                        Made with <span className="text-red-500 mx-1">❤️</span> by GJV and KV
+                        Made with <span className="text-red-500 mx-1">❤️</span> by BETA GROUPS
                     </footer>
                 </main>
             </div>

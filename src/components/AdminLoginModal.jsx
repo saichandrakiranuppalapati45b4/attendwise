@@ -38,8 +38,8 @@ const AdminLoginModal = ({ isOpen, onClose, onConfirm }) => {
                         <X className="w-5 h-5" />
                     </button>
 
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-purple-50 rounded-3xl mb-6">
-                        <ShieldCheck className="w-10 h-10 text-purple-600" />
+                    <div className="inline-flex items-center justify-center w-full mb-6">
+                        <img src="/admin_logo.png" alt="AttendAdmin Logo" className="h-32 w-auto object-contain" />
                     </div>
 
                     <h2 className="text-2xl font-black text-gray-900">Admin Access</h2>
