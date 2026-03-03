@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard,
@@ -8,15 +8,36 @@ import {
     User,
     LogOut,
     Menu,
-    X
+    X,
+    ShieldCheck,
+    Users as AdminUsers,
+    BarChart,
+    ArrowLeft
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import AdminLoginModal from './AdminLoginModal';
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const { signOut } = useAuth();
+    const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+    const { user, signOut } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Shortcut: Ctrl + Shift + S
+            if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+                e.preventDefault();
+                if (user?.email === '24pa1a45b4@vishnu.edu.in') {
+                    setIsAdminModalOpen(true);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [user, navigate]);
 
     const handleSignOut = async () => {
         await signOut();
@@ -30,6 +51,16 @@ const Layout = ({ children }) => {
         { name: 'Reports', href: '/reports', icon: BarChart3 },
         { name: 'Profile', href: '/profile', icon: User },
     ];
+
+    const adminNavigation = [
+        { name: 'Admin Overview', href: '/admin', icon: ShieldCheck },
+        { name: 'Student Directory', href: '/admin/students', icon: AdminUsers },
+        { name: 'System Stats', href: '/admin/stats', icon: BarChart },
+        { name: 'Back to App', href: '/', icon: ArrowLeft },
+    ];
+
+    const isAdminRoute = location.pathname.startsWith('/admin');
+    const activeNavigation = isAdminRoute ? adminNavigation : navigation;
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -49,14 +80,16 @@ const Layout = ({ children }) => {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
                 <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-                    <Link to="/" className="text-2xl font-bold text-blue-600">AttendWise</Link>
+                    <Link to={isAdminRoute ? "/admin" : "/"} className={`text-2xl font-bold ${isAdminRoute ? 'text-purple-600' : 'text-blue-600'}`}>
+                        {isAdminRoute ? 'AttendAdmin' : 'AttendWise'}
+                    </Link>
                     <button className="lg:hidden text-gray-500 hover:text-gray-700" onClick={toggleSidebar}>
                         <X className="w-6 h-6" />
                     </button>
                 </div>
 
                 <nav className="p-4 space-y-1">
-                    {navigation.map((item) => {
+                    {activeNavigation.map((item) => {
                         const isActive = location.pathname === item.href;
                         const Icon = item.icon;
 
@@ -67,11 +100,11 @@ const Layout = ({ children }) => {
                                 className={`
                   flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
                   ${isActive
-                                        ? 'bg-blue-50 text-blue-700'
+                                        ? (isAdminRoute ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700')
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
                 `}
                             >
-                                <Icon className={`w-5 h-5 mr-3 ${isActive ? 'text-blue-700' : 'text-gray-400'}`} />
+                                <Icon className={`w-5 h-5 mr-3 ${isActive ? (isAdminRoute ? 'text-purple-700' : 'text-blue-700') : 'text-gray-400'}`} />
                                 {item.name}
                             </Link>
                         );
@@ -109,6 +142,12 @@ const Layout = ({ children }) => {
                     </footer>
                 </main>
             </div>
+
+            <AdminLoginModal
+                isOpen={isAdminModalOpen}
+                onClose={() => setIsAdminModalOpen(false)}
+                onConfirm={() => window.open('/admin', '_blank')}
+            />
         </div>
     );
 };

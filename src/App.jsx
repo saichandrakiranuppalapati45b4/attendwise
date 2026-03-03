@@ -11,6 +11,9 @@ import Attendance from './pages/Attendance';
 import Timetable from './pages/Timetable';
 import Reports from './pages/Reports';
 import Profile from './pages/Profile';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminStudents from './pages/AdminStudents';
+import AdminStats from './pages/AdminStats';
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
             <Route path="/timetable" element={<Layout><Timetable /></Layout>} />
             <Route path="/reports" element={<Layout><Reports /></Layout>} />
             <Route path="/profile" element={<Layout><Profile /></Layout>} />
+            <Route path="/admin" element={<Layout><AdminDashboard /></Layout>} />
+            <Route path="/admin/students" element={<Layout><AdminStudents /></Layout>} />
+            <Route path="/admin/stats" element={<Layout><AdminStats /></Layout>} />
           </Route>
         </Routes>
       </Router>

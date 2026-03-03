@@ -1,0 +1,148 @@
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../services/supabase';
+import { useAuth } from '../context/AuthContext';
+import {
+    Users,
+    BarChart,
+    ShieldCheck,
+    ArrowRight,
+    Loader2,
+    AlertCircle,
+    CheckCircle2,
+    LayoutDashboard
+} from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+
+const AdminDashboard = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [summary, setSummary] = useState({
+        totalUsers: 0,
+        totalSubjects: 0,
+        totalAttendance: 0
+    });
+
+    const isAdmin = user?.email === '24pa1a45b4@vishnu.edu.in';
+
+    useEffect(() => {
+        if (!isAdmin) {
+            navigate('/');
+            return;
+        }
+        fetchSummary();
+    }, [user, isAdmin, navigate]);
+
+    const fetchSummary = async () => {
+        setIsLoading(true);
+        try {
+            const { count: uCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+            const { count: sCount } = await supabase.from('subjects').select('*', { count: 'exact', head: true });
+            const { count: aCount } = await supabase.from('attendance').select('*', { count: 'exact', head: true });
+
+            setSummary({
+                totalUsers: uCount || 0,
+                totalSubjects: sCount || 0,
+                totalAttendance: aCount || 0
+            });
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    if (!isAdmin) return null;
+
+    return (
+        <div className="max-w-7xl mx-auto space-y-8">
+            <div className="bg-purple-600 rounded-[2rem] p-8 md:p-12 text-white relative overflow-hidden shadow-xl shadow-purple-100">
+                <div className="relative z-10">
+                    <h1 className="text-3xl md:text-4xl font-black mb-4">Welcome to AttendAdmin</h1>
+                    <p className="text-purple-100 max-w-xl text-lg font-medium">
+                        You have full control over the AttendWise ecosystem. Monitor usage, manage students, and view system analytics from one central hub.
+                    </p>
+                </div>
+                <ShieldCheck className="absolute right-[-20px] top-[-20px] w-64 h-64 text-white/10 -rotate-12" />
+            </div>
+
+            {isLoading ? (
+                <div className="flex justify-center py-20">
+                    <Loader2 className="w-10 h-10 animate-spin text-purple-600" />
+                </div>
+            ) : error ? (
+                <div className="bg-red-50 p-6 rounded-3xl border border-red-100 text-red-700 flex items-center">
+                    <AlertCircle className="w-6 h-6 mr-3" />
+                    <p>{error}</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Quick Access Cards */}
+                    <div className="space-y-6">
+                        <Link
+                            to="/admin/students"
+                            className="group block bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="p-4 bg-blue-50 rounded-2xl group-hover:bg-blue-100 transition-colors">
+                                    <Users className="w-8 h-8 text-blue-600" />
+                                </div>
+                                <ArrowRight className="w-6 h-6 text-gray-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900">Student Directory</h3>
+                            <p className="text-gray-500 mt-2 font-medium">View and search through all {summary.totalUsers} registered students.</p>
+                        </Link>
+
+                        <Link
+                            to="/admin/stats"
+                            className="group block bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="p-4 bg-purple-50 rounded-2xl group-hover:bg-purple-100 transition-colors">
+                                    <BarChart className="w-8 h-8 text-purple-600" />
+                                </div>
+                                <ArrowRight className="w-6 h-6 text-gray-300 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900">System Statistics</h3>
+                            <p className="text-gray-500 mt-2 font-medium">Dive deep into attendance metrics and branch distributions.</p>
+                        </Link>
+                    </div>
+
+                    {/* Quick Stats Grid */}
+                    <div className="bg-gray-50/50 rounded-[2.5rem] p-8 border border-gray-100 space-y-4">
+                        <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest ml-2 mb-6">Live Status Summary</h3>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="bg-white p-6 rounded-3xl border border-gray-100">
+                                <Users className="w-5 h-5 text-blue-400 mb-3" />
+                                <div className="text-2xl font-black text-gray-900">{summary.totalUsers}</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase mt-1">Total Users</div>
+                            </div>
+                            <div className="bg-white p-6 rounded-3xl border border-gray-100">
+                                <LayoutDashboard className="w-5 h-5 text-purple-400 mb-3" />
+                                <div className="text-2xl font-black text-gray-900">{summary.totalSubjects}</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase mt-1">Total Subjects</div>
+                            </div>
+                            <div className="bg-white p-6 rounded-3xl border border-gray-100">
+                                <CheckCircle2 className="w-5 h-5 text-green-400 mb-3" />
+                                <div className="text-2xl font-black text-gray-900">{summary.totalAttendance}</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase mt-1">Attendance Marks</div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-8 rounded-3xl border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <div className="text-sm font-bold text-gray-400 uppercase tracking-wider">Project Capacity</div>
+                                <div className="text-2xl font-black text-gray-900 mt-1">Healthy</div>
+                            </div>
+                            <div className="w-12 h-12 rounded-full border-4 border-green-100 border-t-green-500 animate-spin-slow"></div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default AdminDashboard;

@@ -65,6 +65,7 @@ const Profile = () => {
                 .from('profiles')
                 .update({
                     name: profile.name,
+                    branch: profile.branch || null,
                     required_percentage: parseInt(profile.required_percentage, 10),
                     sem_end_date: profile.sem_end_date || null
                 })
@@ -172,6 +173,18 @@ const Profile = () => {
                                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                                     className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
                                     required
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor="branch" className="block text-sm font-medium text-gray-700">Branch</label>
+                                <input
+                                    type="text"
+                                    id="branch"
+                                    value={profile.branch || ''}
+                                    onChange={(e) => setProfile({ ...profile, branch: e.target.value })}
+                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+                                    placeholder="e.g., CSE"
                                 />
                             </div>
 
