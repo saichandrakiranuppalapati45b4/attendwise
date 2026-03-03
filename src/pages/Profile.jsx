@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
 import { Save, Plus, Trash2, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { BRANCHES } from '../utils/branches';
+import BranchSelector from '../components/BranchSelector';
 
 const Profile = () => {
     const { user } = useAuth();
 
     // Profile State
-    const [profile, setProfile] = useState({ name: '', required_percentage: 75, sem_end_date: '' });
+    const [profile, setProfile] = useState({ name: '', branch: BRANCHES[0], required_percentage: 75, sem_end_date: '' });
     const [isSavingProfile, setIsSavingProfile] = useState(false);
     const [profileMessage, setProfileMessage] = useState(null);
 
@@ -37,7 +39,12 @@ const Profile = () => {
                 .single();
 
             if (profileError) throw profileError;
-            if (profileData) setProfile(profileData);
+            if (profileData) {
+                setProfile({
+                    ...profileData,
+                    branch: profileData.branch || BRANCHES[0]
+                });
+            }
 
             // Fetch Subjects
             const { data: subjectsData, error: subjectsError } = await supabase
@@ -177,14 +184,10 @@ const Profile = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="branch" className="block text-sm font-medium text-gray-700">Branch</label>
-                                <input
-                                    type="text"
-                                    id="branch"
-                                    value={profile.branch || ''}
-                                    onChange={(e) => setProfile({ ...profile, branch: e.target.value })}
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
-                                    placeholder="e.g., CSE"
+                                <label htmlFor="branch" className="block text-sm font-medium text-gray-700 mb-1">Branch</label>
+                                <BranchSelector
+                                    value={profile.branch}
+                                    onChange={(branch) => setProfile({ ...profile, branch })}
                                 />
                             </div>
 

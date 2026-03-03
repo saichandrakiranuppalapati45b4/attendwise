@@ -3,9 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus, AlertCircle } from 'lucide-react';
 
+import { BRANCHES } from '../utils/branches';
+import BranchSelector from '../components/BranchSelector';
+
 const SignUp = () => {
     const [name, setName] = useState('');
-    const [branch, setBranch] = useState('');
+    const [branch, setBranch] = useState(BRANCHES[0]);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -77,18 +80,12 @@ const SignUp = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="branch" className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="branch" className="block text-sm font-medium text-gray-700 mb-1">
                                 Branch
                             </label>
-                            <input
-                                id="branch"
-                                name="branch"
-                                type="text"
-                                required
+                            <BranchSelector
                                 value={branch}
-                                onChange={(e) => setBranch(e.target.value)}
-                                className="mt-1 appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
-                                placeholder="e.g., CSE"
+                                onChange={setBranch}
                             />
                         </div>
                         <div>
