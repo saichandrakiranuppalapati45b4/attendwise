@@ -149,7 +149,7 @@ const Layout = ({ children }) => {
                     </div>
                     {/* Footer */}
                     <footer className="w-full py-6 text-center text-sm text-gray-500 border-t border-gray-200">
-                        Made with <span className="text-red-500 mx-1">❤️</span> by BETA GROUPS
+                        Made with <span className="text-red-500 mx-1">❤️</span> by GJV and KV
                     </footer>
                 </main>
             </div>
