@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, AlertCircle } from 'lucide-react';
+import { LogIn, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -68,21 +69,39 @@ const Login = () => {
                                 placeholder="you@vishnu.edu.in"
                             />
                         </div>
-                        <div>
+                        <div className="relative">
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password
                             </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="mt-1 appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
-                                placeholder="••••••••"
-                            />
+                            <div className="mt-1 relative">
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    autoComplete="current-password"
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-5 w-5" />
+                                    ) : (
+                                        <Eye className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
+                            <div className="flex justify-end mt-2">
+                                <Link to="/forgot-password" size="sm" className="text-sm font-bold text-blue-600 hover:text-blue-500 transition-colors">
+                                    Forgot password?
+                                </Link>
+                            </div>
                         </div>
                     </div>
 

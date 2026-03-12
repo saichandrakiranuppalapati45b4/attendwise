@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
 import { Save, Plus, Trash2, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { BRANCHES } from '../utils/branches';
 import BranchSelector from '../components/BranchSelector';
 
 const Profile = () => {
     const { user } = useAuth();
 
     // Profile State
-    const [profile, setProfile] = useState({ name: '', branch: BRANCHES[0], required_percentage: 75, sem_end_date: '' });
+    const [profile, setProfile] = useState({ name: '', branch: '', required_percentage: 75, sem_end_date: '' });
     const [isSavingProfile, setIsSavingProfile] = useState(false);
     const [profileMessage, setProfileMessage] = useState(null);
 

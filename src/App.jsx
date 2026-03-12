@@ -6,6 +6,8 @@ import Layout from './components/Layout';
 
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Attendance from './pages/Attendance';
 import Timetable from './pages/Timetable';
@@ -23,6 +25,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Protected Routes inside Layout */}
           <Route element={<ProtectedRoute />}>
