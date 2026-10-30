@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import AdminLoginModal from './AdminLoginModal';
+import AdAgreementModal from './AdAgreementModal';
+import AdPlaceholder from './AdPlaceholder';
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -147,6 +149,10 @@ const Layout = ({ children }) => {
                     <div className="flex-1 p-4 lg:p-8">
                         {children}
                     </div>
+
+                    {/* Bottom Ad Banner Slot (At the end of every page before the footer) */}
+                    <AdPlaceholder slot="1473158835" client="ca-pub-3061018181237771" />
+
                     {/* Footer */}
                     <footer className="w-full py-6 text-center text-sm text-gray-500 border-t border-gray-200">
                         Made with <span className="text-red-500 mx-1">❤️</span> by KV
@@ -159,6 +165,8 @@ const Layout = ({ children }) => {
                 onClose={() => setIsAdminModalOpen(false)}
                 onConfirm={() => window.open('/admin', '_blank')}
             />
+
+            <AdAgreementModal />
         </div>
     );
 };

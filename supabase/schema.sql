@@ -67,6 +67,7 @@ create table if not exists public.profiles (
   branch text,
   required_percentage integer default 75 check (required_percentage >= 1 and required_percentage <= 100),
   sem_end_date date,
+  has_accepted_ads boolean default false,
   created_at timestamptz default timezone('utc'::text, now()) not null,
   updated_at timestamptz default timezone('utc'::text, now()) not null
 );
@@ -98,12 +99,13 @@ create policy "Users and admins can delete profiles" on public.profiles
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, name, branch, required_percentage)
+  insert into public.profiles (id, name, branch, required_percentage, has_accepted_ads)
   values (
     new.id,
     coalesce(nullif(new.raw_user_meta_data->>'full_name', ''), 'Student'),
     new.raw_user_meta_data->>'branch',
-    75
+    75,
+    false
   )
   on conflict (id) do update set
     name = excluded.name,
